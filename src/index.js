@@ -9,9 +9,44 @@
         constructor(props) {
             super(props);
             this.state = {
-                values: [1, 2, 3, 4, 5, 6, 7, 8, null],
+                values: this.generatePuzzle(3),
                 size: 3
             };
+        }
+
+        generateRandomPuzzle(size) {
+            const puzzle = Array(size * size).fill(null);
+            const choices = [];
+            for (let i = 0; i < puzzle.length - 1; i++) {
+                let next = Math.floor(Math.random() * (puzzle.length - 1) + 1);
+                while (puzzle.indexOf(next) !== -1) {
+                    next = Math.floor(Math.random() * (puzzle.length - 1) + 1);
+                }
+                puzzle[i] = next;
+            }
+            return puzzle;
+        }
+
+        generatePuzzle(size) {
+            let puzzle = this.generateRandomPuzzle(size);
+            while (!this.isSolvable(puzzle)) {
+                puzzle = this.generateRandomPuzzle(size);
+            }
+            return puzzle;
+        }
+
+        isSolvable(puzzle) {
+            let iterations = 0;
+            puzzle.forEach(function (value, index) {
+                if (value !== null) {
+                    for (let i = index + 1; i < puzzle.length; i++) {
+                        if ((puzzle[i] !== null) && (puzzle[i] < value)) {
+                            iterations += 1;
+                        }
+                    }
+                }
+            });
+            return iterations % 2 === 0;
         }
 
         renderSquare(i) {
@@ -23,9 +58,9 @@
 
         handleClick(pos) {
             const current = this.state.values.slice();
-            let candidates = [];
-            let q = Math.floor(pos / this.state.size);
-            let r = pos % this.state.size;
+            const candidates = [];
+            const q = Math.floor(pos / this.state.size);
+            const r = pos % this.state.size;
             if (q < 2) {
                 candidates.push(pos + this.state.size);
             }
