@@ -4,24 +4,36 @@
             props.value !== null ? props.value : '');
     }
 
-    function Board(props) {
-        return React.createElement('div', {},
-            React.createElement('div', {'class': 'board-row'},
-                React.createElement(Square, {value: 1}),
-                React.createElement(Square, {value: 2}),
-                React.createElement(Square, {value: 3})
-            ),
-            React.createElement('div', {'class': 'board-row'},
-                React.createElement(Square, {value: 4}),
-                React.createElement(Square, {value: 5}),
-                React.createElement(Square, {value: 6})
-            ),
-            React.createElement('div', {'class': 'board-row'},
-                React.createElement(Square, {value: 7}),
-                React.createElement(Square, {value: 8}),
-                React.createElement(Square, {value: null})
-            )
-        );
+    class Board extends React.Component {
+
+        constructor(props) {
+            super(props);
+            this.state = [1, 2, 3, 4, 5, 6, 7, 8, null];
+        }
+
+        renderSquare(i) {
+            return React.createElement(Square, {value: this.state[i]});
+        }
+
+        render () {
+            return React.createElement('div', {},
+                React.createElement('div', {'class': 'board-row'},
+                    this.renderSquare(0),
+                    this.renderSquare(1),
+                    this.renderSquare(2)
+                ),
+                React.createElement('div', {'class': 'board-row'},
+                    this.renderSquare(3),
+                    this.renderSquare(4),
+                    this.renderSquare(5)
+                ),
+                React.createElement('div', {'class': 'board-row'},
+                    this.renderSquare(6),
+                    this.renderSquare(7),
+                    this.renderSquare(8)
+                )
+            );
+        }
     }
 
     // ========================================
